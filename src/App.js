@@ -1,5 +1,6 @@
 import { useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
+import { Panell } from './components/Panell';
 
 function App() {
 
@@ -24,10 +25,24 @@ function App() {
     pagesNumber: "",
     languagesNumber: "",
     total: 0
-  });
+  })
+
+  const [isVisible, setIsVisible] = useState(false);
 
   const budgetList = data.text.map((item, index) => {
-    return <label><input type="checkbox" value={index} onChange= {(e) => isChecked(e, index)}/>{` ${item.title} (${item.price}€)`}</label>
+    if(index === 0) {
+      return (
+        <div>
+          <label><input type="checkbox" value={index} onChange= {(e) => isChecked(e, index)}/>{` ${item.title} (${item.price}€)`}</label>
+            <Panell isVisible= {isVisible}>
+                <p>Número de páginas<input className= "inpExtras" type="text" name= "pagesNumber" value= {data.pagesNumber} onChange= {(e) => totalExtras(e)} /></p>
+                <p>Número de idiomas<input className= "inpExtras" type="text" name= "languagesNumber" value= {data.languagesNumber} onChange= {(e) => totalExtras(e)} /></p>
+           </Panell>
+        </div>
+      )
+    } else{
+      return <label><input type="checkbox" value={index} onChange= {(e) => isChecked(e, index)}/>{` ${item.title} (${item.price}€)`}</label>
+    }
   })
 
   const isChecked = (e, index) => {
@@ -35,14 +50,63 @@ function App() {
       if(index === index2 && e.target.checked === true) {
         item.checked = true;
         data.total = data.total + item.price;
-        setData({...data});
+        setData({...data});        
+        {index2 === 0 ? setIsVisible(true) : setIsVisible(false)}
       } else if((index === index2 && e.target.checked === false)) {
         item.checked = false;
         data.total = data.total - item.price;
-        console.log("adios");
         setData({...data});
+        {index2 === 0 ? setIsVisible(false) : setIsVisible(true)}
       }
     });
+  }
+  const totalExtras = (e) => {
+    setData({
+      ...data,
+      [e.target.name] : e.target.value
+    })
+    if(e.target.name === "pagesNumber") {
+      data.pagesNumber = e.target.value;
+    } else {
+      data.languagesNumber = e.target.value;
+    }
+    if(data.pagesNumber || data.languagesNumber === "") {
+      setData({
+        ...data,
+        total : data.total
+      })
+    } else if(data.pagesNumber !== "") {
+      data.pagesNumber = e.target.value;
+      setData({
+        ...data,
+        total: data.total + ((data.pagesNumber * data.languagesNumber) * 30)
+      });
+    } else if(data.languagesNumber !== "") {
+      data.languagesNumber = e.target.value;
+      setData({
+        ...data,
+        total: data.total + ((data.pagesNumber * data.languagesNumber) * 30)
+      });
+    }    
+    setTimeout(() => {
+      if(e.target.name && e.target.value !== "") {
+        if(e.target.name === "pagesNumber") {
+          setData({
+            ...data,
+            pagesNumber: parseInt(e.target.value)
+          });
+        } else {
+          setData({
+            ...data,
+            languagesNumber: parseInt(e.target.value)
+          });
+        }        
+      setData({
+        ...data,
+        total : data.total + e.target.value*30
+      });
+      } 
+    }, 500);
   }
 
   return (
