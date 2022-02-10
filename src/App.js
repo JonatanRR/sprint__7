@@ -35,8 +35,8 @@ function App() {
         <div>
           <label><input type="checkbox" value={index} onChange= {(e) => isChecked(e, index)}/>{` ${item.title} (${item.price}€)`}</label>
             <Panell isVisible= {isVisible}>
-                <p>Número de páginas<input className= "inpExtras" type="text" name= "pagesNumber" value= {data.pagesNumber} onChange= {(e) => totalExtras(e)} /></p>
-                <p>Número de idiomas<input className= "inpExtras" type="text" name= "languagesNumber" value= {data.languagesNumber} onChange= {(e) => totalExtras(e)} /></p>
+                <p>Número de páginas <button className='incrementDecrement' name= "pagesNumber" value ={data.pagesNumber} onClick={(e) => increment(e)} >+</button><input className= "inpExtras" type="text" name= "pagesNumber" value= {data.pagesNumber} onChange= {(e) => totalExtras(e)} /><button className='incrementDecrement' name= "pagesNumber" value ={data.pagesNumber} onClick={(e) => decrement(e)}> - </button></p>
+                <p>Número de idiomas <button className='incrementDecrement' name= "languagesNumber" value ={data.languagesNumber} onClick={(e) => increment(e)}>+</button><input className= "inpExtras" type="text" name= "languagesNumber" value= {data.languagesNumber} onChange= {(e) => totalExtras(e)} /><button className='incrementDecrement' name= "languagesNumber" value ={data.languagesNumber} onClick={(e) => decrement(e)}> - </button></p>
            </Panell>
         </div>
       )
@@ -44,6 +44,36 @@ function App() {
       return <label><input type="checkbox" value={index} onChange= {(e) => isChecked(e, index)}/>{` ${item.title} (${item.price}€)`}</label>
     }
   })
+
+  const increment = (e) => {
+    e.preventDefault();
+    if(e.target.name === "pagesNumber") {
+      data.pagesNumber = parseInt(data.pagesNumber) + 1;
+      data.total = data.total + ((data.pagesNumber +1) * 30);
+      setData({...data});
+    } else if(e.target.name === "languagesNumber") {
+      data.languagesNumber = parseInt(data.languagesNumber) + 1;
+      data.total = data.total + ((data.languagesNumber + 1) * 30);
+      setData({...data});
+    }  
+  }    
+
+  const decrement = (e) => {
+    e.preventDefault();
+    if(e.target.name === "pagesNumber") {
+      setData({
+        ...data,
+        pagesNumber: data.pagesNumber - 1,
+        total: data.total - ((data.pagesNumber - 1) * 30)
+      });
+    } else if(e.target.name === "languagesNumber") {
+      setData({
+        ...data,
+        languagesNumber: data.languagesNumber - 1,
+        total: data.total - ((data.languagesNumber - 1) * 30)
+      });
+    } 
+  }
 
   const isChecked = (e, index) => {
     data.text.map((item, index2) => {
