@@ -1,4 +1,4 @@
-import { useState} from 'react';
+import { useState, useEffect} from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Panell } from './components/Panell';
 
@@ -139,6 +139,10 @@ function App() {
     }, 500);
   }
 
+  useEffect((e) => {
+    localStorage.setItem("total", JSON.stringify(data));
+  });
+
   return (
     <div>
       <h3 className='ms-3 mt-3'>¿Qué quieres hacer?</h3>
@@ -147,7 +151,7 @@ function App() {
         <p>{`Precio: ${data.total}€`}</p> 
       </form>
     </div> 
-  );
+  )
 }
 
 export default App;
