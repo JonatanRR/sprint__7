@@ -34,3 +34,36 @@ code {
   height: 30px;
   margin: 5px;
 }
+
+* {
+  background-color: rgb(174, 174, 250);
+  font-size: 20px;
+}
+
+.menu {  
+  margin: 0;
+  padding: 0;
+  display: flex;
+  list-style: none;
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.enlace {
+  text-decoration: none;
+  color: white;
+  list-style: none;
+  border: 5px solid black;
+  padding: 10px;
+  background-color: black;
+  border-radius: 5px;
+}
+
+.title {
+ font-size: 50px;
+ margin-top: 150px;
+}
+
+.text {
+  margin-top: 50px;
+}
