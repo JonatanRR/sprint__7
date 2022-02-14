@@ -22,9 +22,10 @@ function Budget() {
         price: 200
       }
     ],
-    pagesNumber: "",
-    languagesNumber: "",
-    total: 0
+    pagesNumber: 0,
+    languagesNumber: 0, 
+    checksTotal: 0,    
+    total: 0 
   })
 
   const [isVisible, setIsVisible] = useState(false);
@@ -35,44 +36,38 @@ function Budget() {
         <div>
           <label><input type="checkbox" value={index} onChange= {(e) => isChecked(e, index)}/>{` ${item.title} (${item.price}€)`}</label>
             <Panell isVisible= {isVisible}>
-                <p>Número de páginas <button className='incrementDecrement' name= "pagesNumber" value ={data.pagesNumber} onClick={(e) => increment(e)} >+</button><input className= "inpExtras" type="text" name= "pagesNumber" value= {data.pagesNumber} onChange= {(e) => totalExtras(e)} /><button className='incrementDecrement' name= "pagesNumber" value ={data.pagesNumber} onClick={(e) => decrement(e)}> - </button></p>
-                <p>Número de idiomas <button className='incrementDecrement' name= "languagesNumber" value ={data.languagesNumber} onClick={(e) => increment(e)}>+</button><input className= "inpExtras" type="text" name= "languagesNumber" value= {data.languagesNumber} onChange= {(e) => totalExtras(e)} /><button className='incrementDecrement' name= "languagesNumber" value ={data.languagesNumber} onClick={(e) => decrement(e)}> - </button></p>
+                <p>Número de páginas <button className='incrementDecrement' name= "pagesNumber" onClick={(e)=> increment(e)}>+</button><input className= "inpExtras" type="text" name= "pagesNumber" value= {data.pagesNumber} onChange= {(e)=> totalExtras(e)}/><button className='incrementDecrement' name= "pagesNumber" value ={data.pagesNumber} onClick={(e)=> decrement(e)}> - </button></p>
+                <p>Número de idiomas <button className='incrementDecrement' name= "languagesNumber" onClick={(e)=> increment(e)}>+</button><input className= "inpExtras" type="text" name= "languagesNumber" value= {data.languagesNumber} onChange= {(e)=> totalExtras(e)}/><button className='incrementDecrement' name= "languagesNumber" value ={data.languagesNumber} onClick={(e)=> decrement(e)}> - </button></p>
            </Panell>
         </div>
       )
     } else{
       return <label><input type="checkbox" value={index} onChange= {(e) => isChecked(e, index)}/>{` ${item.title} (${item.price}€)`}</label>
     }
-  })
+  })  
 
-  const increment = (e) => {
+  const increment= (e) => {
     e.preventDefault();
     if(e.target.name === "pagesNumber") {
-      data.pagesNumber = parseInt(data.pagesNumber) + 1;
-      data.total = data.total + ((data.pagesNumber +1) * 30);
-      setData({...data});
-    } else if(e.target.name === "languagesNumber") {
-      data.languagesNumber = parseInt(data.languagesNumber) + 1;
-      data.total = data.total + ((data.languagesNumber + 1) * 30);
-      setData({...data});
-    }  
-  }    
+      data.pagesNumber++
+    } else  if(e.target.name = "languagesNumber"){
+      data.languagesNumber++
+    }
+    data.checksTotal = data.pagesNumber * data.languagesNumber *30;
+    data.total = data.total + data.checksTotal;
+    setData({...data});
+  }
 
   const decrement = (e) => {
     e.preventDefault();
     if(e.target.name === "pagesNumber") {
-      setData({
-        ...data,
-        pagesNumber: data.pagesNumber - 1,
-        total: data.total - ((data.pagesNumber - 1) * 30)
-      });
-    } else if(e.target.name === "languagesNumber") {
-      setData({
-        ...data,
-        languagesNumber: data.languagesNumber - 1,
-        total: data.total - ((data.languagesNumber - 1) * 30)
-      });
-    } 
+      data.pagesNumber--
+    } else  if(e.target.name = "languagesNumber"){
+      data.languagesNumber--
+    }
+    data.checksTotal = data.pagesNumber * data.languagesNumber *30;
+    data.total = data.total - data.checksTotal;
+    setData({...data});
   }
 
   const isChecked = (e, index) => {
@@ -88,60 +83,25 @@ function Budget() {
         setData({...data});
         {index2 === 0 ? setIsVisible(false) : setIsVisible(true)}
       }
-    });
-  }
-  const totalExtras = (e) => {
-    setData({
-      ...data,
-      [e.target.name] : e.target.value
-    })
-    if(e.target.name === "pagesNumber") {
-      data.pagesNumber = e.target.value;
-    } else {
-      data.languagesNumber = e.target.value;
-    }
-    if(data.pagesNumber || data.languagesNumber === "") {
-      setData({
-        ...data,
-        total : data.total
-      })
-    } else if(data.pagesNumber !== "") {
-      data.pagesNumber = e.target.value;
-      setData({
-        ...data,
-        total: data.total + ((data.pagesNumber * data.languagesNumber) * 30)
-      });
-    } else if(data.languagesNumber !== "") {
-      data.languagesNumber = e.target.value;
-      setData({
-        ...data,
-        total: data.total + ((data.pagesNumber * data.languagesNumber) * 30)
-      });
-    }    
-    setTimeout(() => {
-      if(e.target.name && e.target.value !== "") {
-        if(e.target.name === "pagesNumber") {
-          setData({
-            ...data,
-            pagesNumber: parseInt(e.target.value)
-          });
-        } else {
-          setData({
-            ...data,
-            languagesNumber: parseInt(e.target.value)
-          });
-        }        
-      setData({
-        ...data,
-        total : data.total + e.target.value*30
-      });
-      } 
-    }, 500);
+    });    
   }
 
-  useEffect((e) => {
-    localStorage.setItem("total", JSON.stringify(data));
-  });
+  const totalExtras = (e) => {
+    if(e.target.name === "pagesNumber") {
+      data.pagesNumber = e.target.value;
+      setData({...data});
+    } else {
+      data.languagesNumber = e.target.value;
+      setData({...data})
+    }
+    data.checksTotal = data.pagesNumber * data.languagesNumber *30;
+    data.total = data.total + data.checksTotal;
+    setData({...data});
+  }
+
+  useEffect(()=>{
+    const datas = localStorage.setItem('data', JSON.stringify(data))
+  })
 
   return (
     <div>
