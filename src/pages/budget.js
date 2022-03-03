@@ -4,6 +4,7 @@ import { Panell } from '../components/Panell';
 
 function Budget() {
 
+//todos los datos dentro del mismo estado
   const [data, setData] = useState({
     text: [
       {
@@ -28,6 +29,7 @@ function Budget() {
     total: 0 
   })
 
+// estado que hará que el Panell, desplegable con dos secciones más, sea visible o no
   const [isVisible, setIsVisible] = useState(false);
 
   const budgetList = data.text.map((item, index) => {
@@ -46,6 +48,7 @@ function Budget() {
     }
   })  
 
+//incrementa en 1 la cantidad de páginas o idiomas
   const increment= (e) => {
     e.preventDefault();
     if(e.target.name === "pagesNumber") {
@@ -57,7 +60,7 @@ function Budget() {
     data.total = data.total + data.checksTotal;
     setData({...data});
   }
-
+// decrementa en 1 la cantidad de páginas o idiomas
   const decrement = (e) => {
     e.preventDefault();
     if(e.target.name === "pagesNumber") {
@@ -70,6 +73,7 @@ function Budget() {
     setData({...data});
   }
 
+//para que las tres opciones principales sumen en el total según se haga check en el checkbox
   const isChecked = (e, index) => {
     data.text.map((item, index2) => {
       if(index === index2 && e.target.checked === true) {
@@ -85,7 +89,7 @@ function Budget() {
       }
     });    
   }
-
+//suma los extras de las páginas e idiomas al total
   const totalExtras = (e) => {
     if(e.target.name === "pagesNumber") {
       data.pagesNumber = e.target.value;
@@ -99,11 +103,12 @@ function Budget() {
     setData({...data});
   }
 
+//estado para guardar varios presupuestos a través del localStorage. Cuando lo guardo no me aparecen los datos anteriores sino que lo suplanta por el nuevo
   const [budgetLists, setBudgetLists] = useState([]);
   const handleBudget = (e) => {
     e.preventDefault();
     localStorage.setItem('data', JSON.stringify(data));
-    setBudgetLists(JSON.parse(localStorage.getItem('data')));
+    setBudgetLists(localStorage.getItem('data'));
   }
   console.log(budgetLists);
 
