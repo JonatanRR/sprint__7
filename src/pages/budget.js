@@ -99,9 +99,16 @@ function Budget() {
     setData({...data});
   }
 
-  useEffect(()=>{
-    const datas = localStorage.setItem('data', JSON.stringify(data))
-  })
+  const [budgetLists, setBudgetLists] = useState([]);
+  const handleBudget = (e) => {
+    e.preventDefault();
+    localStorage.setItem('data', JSON.stringify(data));
+    setBudgetLists(JSON.parse(localStorage.getItem('data')));
+  }
+  console.log(budgetLists);
+
+  
+  
 
   return (
     <div>
@@ -109,6 +116,7 @@ function Budget() {
       <form className='formulary'>
         {budgetList}
         <p>{`Precio: ${data.total}€`}</p> 
+        <button onClick= {handleBudget}>Guardar presupuesto</button>
       </form>
     </div> 
   )
