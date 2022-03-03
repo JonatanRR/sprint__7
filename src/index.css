@@ -67,3 +67,10 @@ code {
 .text {
   margin-top: 50px;
 }
+
+.buttonSave {
+  width: 300px;
+  border-radius: 10px;
+  padding: 5px;
+  background-color: rgb(226, 129, 73);
+}

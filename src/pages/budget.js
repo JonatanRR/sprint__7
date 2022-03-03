@@ -115,7 +115,7 @@ function Budget() {
       <form className='formulary'>
         {budgetList}
         <p>{`Precio: ${data.total}€`}</p> 
-        <button onClick= {handleBudget}>Guardar presupuesto</button>
+        <button className= 'buttonSave' onClick= {handleBudget}>Guardar presupuesto</button>
       </form>
     </div> 
   )
